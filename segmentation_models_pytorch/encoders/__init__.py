@@ -2,6 +2,7 @@ import functools
 import torch.utils.model_zoo as model_zoo
 
 from .resnet import resnet_encoders
+from .resnet3d import resnet_encoders3d
 from .dpn import dpn_encoders
 from .vgg import vgg_encoders
 from .senet import senet_encoders
@@ -25,6 +26,7 @@ from ._preprocessing import preprocess_input
 
 encoders = {}
 encoders.update(resnet_encoders)
+encoders.update(resnet_encoders3d)
 encoders.update(dpn_encoders)
 encoders.update(vgg_encoders)
 encoders.update(senet_encoders)
