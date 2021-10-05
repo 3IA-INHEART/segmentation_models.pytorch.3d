@@ -4,7 +4,6 @@ from ..encoders import get_encoder
 from ..base import SegmentationModel
 from ..base import SegmentationHead3d, ClassificationHead
 
-from torchsummary import summary
 
 class Unet3d(SegmentationModel):
 
