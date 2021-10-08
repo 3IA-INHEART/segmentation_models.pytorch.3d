@@ -31,10 +31,10 @@ from .resnet3d_base import BasicBlock3d
 from .resnet3d_base import Bottleneck3d
 from pretrainedmodels.models.torchvision_models import pretrained_settings
 
-from ._base import EncoderMixin
+from ._base import EncoderMixin3d
 
 
-class ResNetEncoder3d(ResNet3d, EncoderMixin):
+class ResNetEncoder3d(ResNet3d, EncoderMixin3d):
     def __init__(self, out_channels, depth=5, **kwargs):
         super().__init__(**kwargs)
         self._depth = depth
