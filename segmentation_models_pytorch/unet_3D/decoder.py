@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from ..base import modules as md
 
 
-class DecoderBlock3d(nn.Module):
+class DecoderBlock_3D(nn.Module):
     def __init__(
             self,
             in_channels,
@@ -43,7 +43,7 @@ class DecoderBlock3d(nn.Module):
         return x
 
 
-class CenterBlock3d(nn.Sequential):
+class CenterBlock_3D(nn.Sequential):
     def __init__(self, in_channels, out_channels, use_batchnorm=True):
         conv1 = md.Conv3dReLU(
             in_channels,
@@ -62,7 +62,7 @@ class CenterBlock3d(nn.Sequential):
         super().__init__(conv1, conv2)
 
 
-class UnetDecoder3d(nn.Module):
+class UnetDecoder_3D(nn.Module):
     def __init__(
             self,
             encoder_channels,
@@ -91,7 +91,7 @@ class UnetDecoder3d(nn.Module):
         out_channels = decoder_channels
 
         if center:
-            self.center = CenterBlock3d(
+            self.center = CenterBlock_3D(
                 head_channels, head_channels, use_batchnorm=use_batchnorm
             )
         else:
@@ -100,7 +100,7 @@ class UnetDecoder3d(nn.Module):
         # combine decoder keyword arguments
         kwargs = dict(use_batchnorm=use_batchnorm, attention_type=attention_type)
         blocks = [
-            DecoderBlock3d(in_ch, skip_ch, out_ch, **kwargs)
+            DecoderBlock_3D(in_ch, skip_ch, out_ch, **kwargs)
             for in_ch, skip_ch, out_ch in zip(in_channels, skip_channels, out_channels)
         ]
         self.blocks = nn.ModuleList(blocks)

@@ -10,7 +10,7 @@ class SegmentationHead(nn.Sequential):
         activation = Activation(activation)
         super().__init__(conv2d, upsampling, activation)
 
-class SegmentationHead3d(nn.Sequential):
+class SegmentationHead_3D(nn.Sequential):
 
     def __init__(self, in_channels, out_channels, kernel_size=3, activation=None, upsampling=1, temporal_size=1):
         conv3d = nn.Conv3d(in_channels, out_channels, kernel_size=(temporal_size,kernel_size,kernel_size), padding=(0,kernel_size // 2,kernel_size // 2))

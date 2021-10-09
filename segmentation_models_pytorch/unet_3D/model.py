@@ -1,15 +1,15 @@
 from typing import Optional, Union, List
-from .decoder import UnetDecoder3d
+from .decoder import UnetDecoder_3D
 from ..encoders import get_encoder
 from ..base import SegmentationModel
-from ..base import SegmentationHead3d, ClassificationHead
+from ..base import SegmentationHead_3D, ClassificationHead
 
 
-class Unet3d(SegmentationModel):
+class Unet_3D(SegmentationModel):
 
     def __init__(
         self,
-        encoder_name: str = "resnet343d",
+        encoder_name: str = "resnet34_3D",
         encoder_depth: int = 5,
         encoder_weights: Optional[str] = "imagenet",
         decoder_use_batchnorm: bool = True,
@@ -30,7 +30,7 @@ class Unet3d(SegmentationModel):
             weights=None,
         )
 
-        self.decoder = UnetDecoder3d(
+        self.decoder = UnetDecoder_3D(
             encoder_channels=self.encoder.out_channels,
             decoder_channels=decoder_channels,
             n_blocks=encoder_depth,
@@ -39,7 +39,7 @@ class Unet3d(SegmentationModel):
             attention_type=decoder_attention_type,
         )
 
-        self.segmentation_head = SegmentationHead3d(
+        self.segmentation_head = SegmentationHead_3D(
             in_channels=decoder_channels[-1],
             out_channels=classes,
             activation=activation,

@@ -17,12 +17,14 @@ def get_encoders():
         "resnext101_32x48d",
     ]
     encoders = smp.encoders.get_encoder_names()
-    encoders = [e for e in encoders if e not in exclude_encoders]
+    encoders = [e for e in encoders if e not in exclude_encoders and e[-3:] != '_3D']
     encoders.append("tu-resnet34") # for timm universal encoder
+
     return encoders
 
 
 ENCODERS = get_encoders()
+
 DEFAULT_ENCODER = "resnet18"
 
 
@@ -56,6 +58,7 @@ def _test_forward_backward(model, sample, test_shape=False):
 @pytest.mark.parametrize("encoder_depth", [3, 5])
 @pytest.mark.parametrize("model_class", [smp.FPN, smp.PSPNet, smp.Linknet, smp.Unet, smp.UnetPlusPlus])
 def test_forward(model_class, encoder_name, encoder_depth, **kwargs):
+
     if model_class is smp.Unet or model_class is smp.UnetPlusPlus or model_class is smp.MAnet:
         kwargs["decoder_channels"] = (16, 16, 16, 16, 16)[-encoder_depth:]
     model = model_class(
@@ -69,6 +72,7 @@ def test_forward(model_class, encoder_name, encoder_depth, **kwargs):
         test_shape = False
 
     _test_forward(model, sample, test_shape)
+
 
 
 @pytest.mark.parametrize(

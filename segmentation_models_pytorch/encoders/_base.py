@@ -4,7 +4,7 @@ from typing import List
 from collections import OrderedDict
 
 from . import _utils as utils
-from . import _utils3d as utils3d
+from . import _utils_3D as utils_3D
 
 
 class EncoderMixin:
@@ -53,7 +53,7 @@ class EncoderMixin:
                 dilation_rate=dilation_rate,
             )
 
-class EncoderMixin3d:
+class EncoderMixin_3D:
     """Add encoder functionality such as:
         - output channels specification of feature tensors (produced by encoder)
         - patching first convolution for arbitrary input channels
@@ -73,7 +73,7 @@ class EncoderMixin3d:
         if self._out_channels[0] == 3:
             self._out_channels = tuple([in_channels] + list(self._out_channels)[1:])
 
-        utils3d.patch_first_conv3d(model=self, new_in_channels=in_channels, pretrained=pretrained)
+        utils_3D.patch_first_conv3d(model=self, new_in_channels=in_channels, pretrained=pretrained)
 
     def get_stages(self):
         """Method should be overridden in encoder"""

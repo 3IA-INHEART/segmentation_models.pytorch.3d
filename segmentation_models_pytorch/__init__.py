@@ -6,7 +6,7 @@ from .fpn import FPN
 from .pspnet import PSPNet
 from .deeplabv3 import DeepLabV3, DeepLabV3Plus
 from .pan import PAN
-from .unet3d import Unet3d
+from .unet_3D import Unet_3D
 
 from . import encoders
 from . import utils
@@ -30,7 +30,7 @@ def create_model(
 
     """
 
-    archs = [Unet, Unet3d, UnetPlusPlus, MAnet, Linknet, FPN, PSPNet, DeepLabV3, DeepLabV3Plus, PAN]
+    archs = [Unet, Unet_3D, UnetPlusPlus, MAnet, Linknet, FPN, PSPNet, DeepLabV3, DeepLabV3Plus, PAN]
     archs_dict = {a.__name__.lower(): a for a in archs}
     try:
         model_class = archs_dict[arch.lower()]

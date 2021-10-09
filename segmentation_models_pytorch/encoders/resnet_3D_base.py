@@ -4,9 +4,9 @@ import torch.nn as nn
 from typing import Type, Any, Callable, Union, List, Optional
 
 
-__all__ = ['ResNet3d', 'resnet183d', 'resnet343d', 'resnet503d', 'resnet1013d',
-           'resnet1523d', 'resnext50_32x4d3d', 'resnext101_32x8d3d',
-           'wide_resnet50_23d', 'wide_resnet101_23d']
+__all__ = ['ResNet_3D', 'resnet18_3D', 'resnet34_3D', 'resnet50_3D', 'resnet101_3D',
+           'resnet152_3D', 'resnext50_32x4d_3D', 'resnext101_32x8d_3D',
+           'wide_resnet50_2_3D', 'wide_resnet101_2_3D']
 
 
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv3d:
@@ -20,7 +20,7 @@ def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv3d:
     return nn.Conv3d(in_planes, out_planes, kernel_size=1, stride=(1, stride, stride), bias=False)
 
 
-class BasicBlock3d(nn.Module):
+class BasicBlock_3D(nn.Module):
     expansion: int = 1
 
     def __init__(
@@ -34,7 +34,7 @@ class BasicBlock3d(nn.Module):
         dilation: int = 1,
         norm_layer: Optional[Callable[..., nn.Module]] = None
     ) -> None:
-        super(BasicBlock3d, self).__init__()
+        super(BasicBlock_3D, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm3d
         if groups != 1 or base_width != 64:
@@ -69,7 +69,7 @@ class BasicBlock3d(nn.Module):
         return out
 
 
-class Bottleneck3d(nn.Module):
+class Bottleneck_3D(nn.Module):
     # Bottleneck in torchvision places the stride for downsampling at 3x3 convolution(self.conv2)
     # while original implementation places the stride at the first 1x1 convolution(self.conv1)
     # according to "Deep residual learning for image recognition"https://arxiv.org/abs/1512.03385.
@@ -89,7 +89,7 @@ class Bottleneck3d(nn.Module):
         dilation: int = 1,
         norm_layer: Optional[Callable[..., nn.Module]] = None
     ) -> None:
-        super(Bottleneck3d, self).__init__()
+        super(Bottleneck_3D, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm3d
         width = int(planes * (base_width / 64.)) * groups
@@ -127,11 +127,11 @@ class Bottleneck3d(nn.Module):
         return out
 
 
-class ResNet3d(nn.Module):
+class ResNet_3D(nn.Module):
 
     def __init__(
         self,
-        block: Type[Union[BasicBlock3d, Bottleneck3d]],
+        block: Type[Union[BasicBlock_3D, Bottleneck_3D]],
         layers: List[int],
         num_classes: int = 1000,
         zero_init_residual: bool = False,
@@ -140,7 +140,7 @@ class ResNet3d(nn.Module):
         replace_stride_with_dilation: Optional[List[bool]] = None,
         norm_layer: Optional[Callable[..., nn.Module]] = None
     ) -> None:
-        super(ResNet3d, self).__init__()
+        super(ResNet_3D, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm3d
         self._norm_layer = norm_layer
@@ -183,12 +183,12 @@ class ResNet3d(nn.Module):
         # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
-                if isinstance(m, Bottleneck3d):
+                if isinstance(m, Bottleneck_3D):
                     nn.init.constant_(m.bn3.weight, 0)  # type: ignore[arg-type]
-                elif isinstance(m, BasicBlock3d):
+                elif isinstance(m, BasicBlock_3D):
                     nn.init.constant_(m.bn2.weight, 0)  # type: ignore[arg-type]
 
-    def _make_layer(self, block: Type[Union[BasicBlock3d, Bottleneck3d]], planes: int, blocks: int,
+    def _make_layer(self, block: Type[Union[BasicBlock_3D, Bottleneck_3D]], planes: int, blocks: int,
                     stride: int = 1, dilate: bool = False) -> nn.Sequential:
         norm_layer = self._norm_layer
         downsample = None
@@ -237,18 +237,18 @@ class ResNet3d(nn.Module):
 
 def _resnet(
     arch: str,
-    block: Type[Union[BasicBlock3d, Bottleneck3d]],
+    block: Type[Union[BasicBlock_3D, Bottleneck_3D]],
     layers: List[int],
     pretrained: bool,
     progress: bool,
     **kwargs: Any
-) -> ResNet3d:
-    model = ResNet3d(block, layers, **kwargs)
+) -> ResNet_3D:
+    model = ResNet_3D(block, layers, **kwargs)
 
     return model
 
 
-def resnet183d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnet18_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNet-18 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
@@ -256,11 +256,11 @@ def resnet183d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet18', BasicBlock3d, [2, 2, 2, 2], pretrained, progress,
+    return _resnet('resnet18', BasicBlock_3D, [2, 2, 2, 2], pretrained, progress,
                    **kwargs)
 
 
-def resnet343d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnet34_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNet-34 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
@@ -268,11 +268,11 @@ def resnet343d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet34', BasicBlock3d, [3, 4, 6, 3], pretrained, progress,
+    return _resnet('resnet34', BasicBlock_3D, [3, 4, 6, 3], pretrained, progress,
                    **kwargs)
 
 
-def resnet503d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnet50_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNet-50 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
@@ -280,11 +280,11 @@ def resnet503d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet50', Bottleneck3d, [3, 4, 6, 3], pretrained, progress,
+    return _resnet('resnet50', Bottleneck_3D, [3, 4, 6, 3], pretrained, progress,
                    **kwargs)
 
 
-def resnet1013d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnet101_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNet-101 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
@@ -292,11 +292,11 @@ def resnet1013d(pretrained: bool = False, progress: bool = True, **kwargs: Any) 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet101', Bottleneck3d, [3, 4, 23, 3], pretrained, progress,
+    return _resnet('resnet101', Bottleneck_3D, [3, 4, 23, 3], pretrained, progress,
                    **kwargs)
 
 
-def resnet1523d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnet152_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNet-152 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
@@ -304,11 +304,11 @@ def resnet1523d(pretrained: bool = False, progress: bool = True, **kwargs: Any) 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet152', Bottleneck3d, [3, 8, 36, 3], pretrained, progress,
+    return _resnet('resnet152', Bottleneck_3D, [3, 8, 36, 3], pretrained, progress,
                    **kwargs)
 
 
-def resnext50_32x4d3d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnext50_32x4d_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNeXt-50 32x4d model from
     `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
@@ -318,11 +318,11 @@ def resnext50_32x4d3d(pretrained: bool = False, progress: bool = True, **kwargs:
     """
     kwargs['groups'] = 32
     kwargs['width_per_group'] = 4
-    return _resnet('resnext50_32x4d', Bottleneck3d, [3, 4, 6, 3],
+    return _resnet('resnext50_32x4d', Bottleneck_3D, [3, 4, 6, 3],
                    pretrained, progress, **kwargs)
 
 
-def resnext101_32x8d3d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def resnext101_32x8d3d_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""ResNeXt-101 32x8d model from
     `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
@@ -332,11 +332,11 @@ def resnext101_32x8d3d(pretrained: bool = False, progress: bool = True, **kwargs
     """
     kwargs['groups'] = 32
     kwargs['width_per_group'] = 8
-    return _resnet('resnext101_32x8d', Bottleneck3d, [3, 4, 23, 3],
+    return _resnet('resnext101_32x8d', Bottleneck_3D, [3, 4, 23, 3],
                    pretrained, progress, **kwargs)
 
 
-def wide_resnet50_23d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def wide_resnet50_2_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""Wide ResNet-50-2 model from
     `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
 
@@ -350,11 +350,11 @@ def wide_resnet50_23d(pretrained: bool = False, progress: bool = True, **kwargs:
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet50_2', Bottleneck3d, [3, 4, 6, 3],
+    return _resnet('wide_resnet50_2', Bottleneck_3D, [3, 4, 6, 3],
                    pretrained, progress, **kwargs)
 
 
-def wide_resnet101_23d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet3d:
+def wide_resnet101_2_3D(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet_3D:
     r"""Wide ResNet-101-2 model from
     `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
 
@@ -368,5 +368,5 @@ def wide_resnet101_23d(pretrained: bool = False, progress: bool = True, **kwargs
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet101_2', Bottleneck3d, [3, 4, 23, 3],
+    return _resnet('wide_resnet101_2', Bottleneck_3D, [3, 4, 23, 3],
                    pretrained, progress, **kwargs)

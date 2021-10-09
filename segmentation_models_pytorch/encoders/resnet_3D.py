@@ -26,15 +26,15 @@ from copy import deepcopy
 
 import torch.nn as nn
 
-from .resnet3d_base import ResNet3d
-from .resnet3d_base import BasicBlock3d
-from .resnet3d_base import Bottleneck3d
+from .resnet_3D_base import ResNet_3D
+from .resnet_3D_base import BasicBlock_3D
+from .resnet_3D_base import Bottleneck_3D
 from pretrainedmodels.models.torchvision_models import pretrained_settings
 
-from ._base import EncoderMixin3d
+from ._base import EncoderMixin_3D
 
 
-class ResNetEncoder3d(ResNet3d, EncoderMixin3d):
+class ResNetEncoder_3D(ResNet_3D, EncoderMixin_3D):
     def __init__(self, out_channels, depth=5, **kwargs):
         super().__init__(**kwargs)
         self._depth = depth
@@ -123,113 +123,113 @@ for model_name, sources in new_settings.items():
         }
 
 
-resnet_encoders3d = {
-    "resnet183d": {
-        "encoder": ResNetEncoder3d,
+resnet_encoders_3D = {
+    "resnet18_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnet18"],
         "params": {
             "out_channels": (3, 64, 64, 128, 256, 512),
-            "block": BasicBlock3d,
+            "block": BasicBlock_3D,
             "layers": [2, 2, 2, 2],
         },
     },
-    "resnet343d": {
-        "encoder": ResNetEncoder3d,
+    "resnet34_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnet34"],
         "params": {
             "out_channels": (3, 64, 64, 128, 256, 512),
-            "block": BasicBlock3d,
+            "block": BasicBlock_3D,
             "layers": [3, 4, 6, 3],
         },
     },
-    "resnet503d": {
-        "encoder": ResNetEncoder3d,
+    "resnet50_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnet50"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 6, 3],
         },
     },
-    "resnet1013d": {
-        "encoder": ResNetEncoder3d,
+    "resnet101_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnet101"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
         },
     },
-    "resnet1523d": {
-        "encoder": ResNetEncoder3d,
+    "resnet152_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnet152"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 8, 36, 3],
         },
     },
-    "resnext50_32x4d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext50_32x4d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext50_32x4d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 6, 3],
             "groups": 32,
             "width_per_group": 4,
         },
     },
-    "resnext101_32x4d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext101_32x4d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext101_32x4d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
             "groups": 32,
             "width_per_group": 4,
         },
     },
-    "resnext101_32x8d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext101_32x8d3d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext101_32x8d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
             "groups": 32,
             "width_per_group": 8,
         },
     },
-    "resnext101_32x16d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext101_32x16d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext101_32x16d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
             "groups": 32,
             "width_per_group": 16,
         },
     },
-    "resnext101_32x32d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext101_32x32d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext101_32x32d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
             "groups": 32,
             "width_per_group": 32,
         },
     },
-    "resnext101_32x48d3d": {
-        "encoder": ResNetEncoder3d,
+    "resnext101_32x48d_3D": {
+        "encoder": ResNetEncoder_3D,
         "pretrained_settings": pretrained_settings["resnext101_32x48d"],
         "params": {
             "out_channels": (3, 64, 256, 512, 1024, 2048),
-            "block": Bottleneck3d,
+            "block": Bottleneck_3D,
             "layers": [3, 4, 23, 3],
             "groups": 32,
             "width_per_group": 48,

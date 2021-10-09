@@ -8,6 +8,6 @@ from .modules import (
 
 from .heads import (
     SegmentationHead,
-    SegmentationHead3d,
+    SegmentationHead_3D,
     ClassificationHead,
 )
