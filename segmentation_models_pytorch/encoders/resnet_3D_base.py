@@ -11,8 +11,8 @@ __all__ = ['ResNet_3D', 'resnet18_3D', 'resnet34_3D', 'resnet50_3D', 'resnet101_
 
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv3d:
     """3x3 convolution with padding"""
-    return nn.Conv3d(in_planes, out_planes, kernel_size=(1,3,3), stride=(1,stride,stride),
-                     padding=(0,dilation,dilation), groups=groups, bias=False, dilation=(1,dilation,dilation))
+    return nn.Conv3d(in_planes, out_planes, kernel_size=(3,3,3), stride=(1,stride,stride),
+                     padding=(1,dilation,dilation), groups=groups, bias=False, dilation=(1,dilation,dilation))
 
 
 def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv3d:
@@ -160,7 +160,7 @@ class ResNet_3D(nn.Module):
                                bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool3d(kernel_size=(1,3,3), stride=(1,2,2), padding=(0,1,1))
+        self.maxpool = nn.MaxPool3d(kernel_size=(3,3,3), stride=(1,2,2), padding=(1,1,1))
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
                                        dilate=replace_stride_with_dilation[0])

@@ -66,9 +66,9 @@ class Conv3dReLU(nn.Sequential):
         conv = nn.Conv3d(
             in_channels,
             out_channels,
-            (1, kernel_size, kernel_size),
+            (3, kernel_size, kernel_size),
             stride=(1, stride, stride),
-            padding=(0, padding, padding),
+            padding=(1, padding, padding),
             bias=not (use_batchnorm),
         )
         relu = nn.ReLU(inplace=True)
@@ -104,7 +104,7 @@ class SCSEModule_3D(nn.Module):
     def __init__(self, in_channels, reduction=16):
         super().__init__()
         self.cSE = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
+            nn.AdaptiveAvgPool3d(1),
             nn.Conv3d(in_channels, in_channels // reduction, 1),
             nn.ReLU(inplace=True),
             nn.Conv3d(in_channels // reduction, in_channels, 1),
