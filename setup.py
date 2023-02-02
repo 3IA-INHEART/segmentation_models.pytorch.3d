@@ -12,13 +12,13 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'segmentation_models_pytorch'
+NAME = 'segmentation_models_pytorch_3d'
 DESCRIPTION = 'Image segmentation models with pre-trained backbones. PyTorch.'
-URL = 'https://github.com/qubvel/segmentation_models.pytorch'
+URL = None# 'https://github.com/qubvel/segmentation_models.pytorch'
 EMAIL = 'qubvel@gmail.com'
 AUTHOR = 'Pavel Yakubovskiy'
 REQUIRES_PYTHON = '>=3.0.0'
-VERSION = None
+VERSION = "0.0.1"
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
@@ -92,6 +92,14 @@ class UploadCommand(Command):
 
         sys.exit()
 
+import re
+PACKAGE_NAME = NAME
+SOURCE_DIRECTORY = 'segmentation_models_pytorch'
+SOURCE_PACKAGE_REGEX = re.compile(rf'^{SOURCE_DIRECTORY}')
+
+source_packages = find_packages(include=[SOURCE_DIRECTORY, f'{SOURCE_DIRECTORY}.*'])
+proj_packages = [SOURCE_PACKAGE_REGEX.sub(PACKAGE_NAME, name) for name in source_packages]
+
 
 # Where the magic happens:
 setup(
@@ -104,7 +112,9 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(exclude=('tests', 'docs', 'images')),
+    #packages=find_packages(exclude=('tests', 'docs', 'images')),
+    packages=proj_packages,
+    package_dir={PACKAGE_NAME: SOURCE_DIRECTORY},
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
